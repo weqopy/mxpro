@@ -65,7 +65,8 @@ class ActiveView(View):
 # 登录视图类
 class LoginView(View):
     def get(self, request):
-        return render(request, 'login.html', {})
+        login_form = LoginForm()
+        return render(request, 'login.html', {"login_form": login_form})
 
     def post(self, request):
         # 表单

@@ -148,10 +148,9 @@
                             {{ register_form.captcha }}
                         </div>
                         <div class="error btns" id="jsEmailTips">{% for key, error in register_form.errors.items %}{{ error }}{% endfor %}{{ msg }}</div>
-                        <div class="auto-box marb8">
-                        </div>
+                        <div class="auto-box marb8"></div>
                         <input class="btn btn-green" id="jsEmailRegBtn" type="submit" value="注册并登录" />
-                    {% csrf_token %}
+                        {% csrf_token %}
                     </form>
                 </div>
                 <p class="form-p">已有账号？<a href="{% url 'login' %}">[立即登录]</a></p>
