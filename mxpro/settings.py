@@ -144,7 +144,7 @@ STATICFILES_DIRS = [
 EMAIL_HOST = "smtp.sina.com"
 EMAIL_PORT = 25
 # 隐藏邮箱账号密码
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = os.environ.get('sina_mail')
+EMAIL_HOST_PASSWORD = os.environ.get('sina_pwd')
 EMAIL_USE_TLS = False
-EMAIL_FROM = ""
+EMAIL_FROM = os.environ.get('sina_mail')
