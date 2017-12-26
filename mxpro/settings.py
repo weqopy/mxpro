@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'operation',
     'xadmin',
     'crispy_forms',
+    'captcha',
 ]
 
 AUTH_USER_MODEL = 'users.UserProfile'
@@ -139,3 +140,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(APP_DIR, 'static'),
 ]
+
+EMAIL_HOST = "smtp.sina.com"
+EMAIL_PORT = 25
+# 隐藏邮箱账号密码
+EMAIL_HOST_USER = os.environ.get('sina_mail')
+EMAIL_HOST_PASSWORD = os.environ.get('sina_pwd')
+EMAIL_USE_TLS = False
+EMAIL_FROM = os.environ.get('sina_mail')
