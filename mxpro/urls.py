@@ -15,22 +15,28 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.views.generic import TemplateView
+from django.views.static import serve
 
 import xadmin
+from mxpro.settings import MEDIA_ROOT
+from organization.views import OrgView
 from users.views import LoginView, RegisterView, ActiveView, ForgetPwdView, \
     ResetView, ModifyView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
-
     url('^$', TemplateView.as_view(template_name="index.html"), name='index'),
-    url('^login/$', LoginView.as_view(), name='login'),
-    url('^register/$', RegisterView.as_view(), name='register'),
-
     url(r'^captcha/', include('captcha.urls')),
+
+    url(r'^login/$', LoginView.as_view(), name='login'),
+    url(r'^register/$', RegisterView.as_view(), name='register'),
     url(r'^active/(?P<active_code>.*)/$', ActiveView.as_view(), name='active'),
     url(r'^forget/$', ForgetPwdView.as_view(), name='forget_pwd'),
     url(r'^reset/(?P<active_code>.*)/$', ResetView.as_view(), name='reset_pwd'),
     url(r'^modify_pwd/$', ModifyView.as_view(), name='modify_pwd'),
 
+    # 课程机构 url 配置
+    url(r'^org/', include('organization.urls', namespace='org')),
+
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 ]
