@@ -4,7 +4,7 @@ from .models import Course, Lesson, Video, CourseResource
 
 class CourseAdmin(object):
     list_display = ['name', 'desc', 'detail', 'degree', 'learn_times',
-                    'students', 'favorite_nums', 'image', 'click_nums', 'add_time']
+                    'students', 'favorite_nums', 'click_nums', 'add_time']
     search_fields = ['name', 'desc', 'detail', 'degree', 'students',
                      'favorite_nums', 'image', 'add_time']
     list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times',
