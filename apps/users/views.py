@@ -7,7 +7,7 @@ from django.views.generic.base import View
 
 from users.forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm
 from users.models import UserProfile, EmailVerifyRecord
-from users.utils.email_send import send_register_email
+from utils.email_send import send_register_email
 
 
 class CustomBackend(ModelBackend):

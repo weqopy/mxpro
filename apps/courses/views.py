@@ -3,9 +3,9 @@ from django.views.generic import View
 from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
 
 from courses.models import Course, CourseResource
-from operation.models import UserFavorite, CourseComments
+from operation.models import UserFavorite, CourseComments, UserCourse
 from django.http import HttpResponse
-
+from utils.mixin_utils import LoginRequiredMixin
 
 class CourseListView(View):
     def get(self, request):
@@ -74,14 +74,26 @@ class CourseDetailView(View):
         })
 
 
-class CourseInfoView(View):
+class CourseInfoView(LoginRequiredMixin, View):
     def get(self, request, course_id):
         course = Course.objects.get(id=int(course_id))
+
+        # 查询用户是否已关联该课程
+        user_courses_check = UserCourse.objects.filter(user=request.user, course=course)
+        if not user_courses_check:
+            user_course = UserCourse(user=request.user, course=course)
+            user_course.save()
+
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
+        course_ids = [user_course.course.id for user_course in user_courses]
+        relate_courses = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]
         all_resources = CourseResource.objects.filter(course=course)
         return render(request, 'course-video.html', {
             'course': course,
             'all_resources': all_resources,
-
+            'relate_courses': relate_courses,
         })
 
 
