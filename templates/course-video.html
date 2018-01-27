@@ -88,8 +88,8 @@
                             <li><a id="commentOn" class="" href="{% url 'course:course_comment' course.id %}"><span>评论</span></a></li>
                         </ul>
                     </div>
-                    <div id="notice" class="clearfix">
-                        <div class="l"> <strong>课程公告:</strong> <a  href="javascript:void(0)">Spring的文档以及相关的jar文件已上传</a> </div>
+                    <div id="" class="clearfix">
+
                     </div>
 
                     <div class="mod-chapters">
@@ -101,7 +101,7 @@
                             <ul class="video">
                                 {% for video in lesson.get_lesson_video %}
                                 <li>
-                                    <a target="_blank" href='/video/3662' class="J-media-item studyvideo">{{ video.name }} ({{ video.video_times }})
+                                    <a target="_blank" href='{% url 'course:course_video' video.id %}' class="J-media-item studyvideo">{{ video.name }} ({{ video.video_times }})
                                         <i class="study-state"></i>
                                     </a>
                                 </li>
