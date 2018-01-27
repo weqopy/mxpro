@@ -38,7 +38,10 @@ class CourseListView(View):
 
 
 class VideoPlayView(View):
-    # 视频播放页面
+    """
+    视频播放页面
+    """
+    # TODO: 视频窗口不居中，页面待调整
     def get(self, request, video_id):
         video = Video.objects.get(id=int(video_id))
         course = video.lesson.course

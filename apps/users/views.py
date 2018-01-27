@@ -20,6 +20,7 @@ class CustomBackend(ModelBackend):
         except Exception as e:
             return None
 
+
 # 注册视图类
 class RegisterView(View):
     def get(self, request):
@@ -47,6 +48,7 @@ class RegisterView(View):
         else:
             return render(request, "register.html", {"register_form": register_form})
 
+
 # 激活视图类
 class ActiveView(View):
     def get(self, request, active_code):
@@ -58,7 +60,7 @@ class ActiveView(View):
                 user.is_active = True
                 user.save()
         else:
-             return render(request, "active_fail.html")
+            return render(request, "active_fail.html")
         return render(request, "login.html")
 
 
@@ -112,7 +114,7 @@ class ResetView(View):
                 email = record.email
                 return render(request, 'password_reset.html', {'email': email})
         else:
-             return render(request, "active_fail.html")
+            return render(request, "active_fail.html")
         return render(request, "login.html")
 
 
