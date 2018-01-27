@@ -18,10 +18,14 @@ class CityDict(models.Model):
 class CourseOrg(models.Model):
     name = models.CharField(max_length=50, verbose_name='机构名称')
     desc = models.TextField(verbose_name='机构描述')
-    category = models.CharField(max_length=20, choices=(('pxjg', '培训机构'), ('gr', '个人'), ('gx', '高校')), verbose_name='机构类别', default='pxjg')
+    category = models.CharField(max_length=20,
+                                choices=(('pxjg', '培训机构'),
+                                         ('gr', '个人'), ('gx', '高校')),
+                                verbose_name='机构类别', default='pxjg')
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
     fav_nums = models.IntegerField(default=0, verbose_name=' 收藏数')
-    image = models.ImageField(upload_to='org/%Y/%m', verbose_name='logo')
+    image = models.ImageField(null=True, blank=True, upload_to='org/%Y/%m',
+                              verbose_name='logo')
     address = models.CharField(max_length=150, verbose_name='机构地址')
     city = models.ForeignKey(CityDict, verbose_name='所在城市')
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
@@ -31,6 +35,9 @@ class CourseOrg(models.Model):
     class Meta:
         verbose_name = '课程机构'
         verbose_name_plural = verbose_name
+
+    def get_teacher_nums(self):
+        return self.teacher_set.all().count()
 
     def __str__(self):
         return self.name
@@ -45,7 +52,8 @@ class Teacher(models.Model):
     points = models.CharField(max_length=50, verbose_name='教学特点')
     click_nums = models.IntegerField(default=0, verbose_name='点击数')
     fav_nums = models.IntegerField(default=0, verbose_name=' 收藏数')
-    image = models.ImageField(default='', upload_to='courses/%Y/%m', verbose_name='头像')
+    image = models.ImageField(
+        default='', upload_to='courses/%Y/%m', verbose_name='头像')
 
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
 

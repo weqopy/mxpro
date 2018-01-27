@@ -19,7 +19,6 @@ from django.views.static import serve
 
 import xadmin
 from mxpro.settings import MEDIA_ROOT
-from organization.views import OrgView
 from users.views import LoginView, RegisterView, ActiveView, ForgetPwdView, \
     ResetView, ModifyView
 
@@ -37,6 +36,9 @@ urlpatterns = [
 
     # 课程机构 url 配置
     url(r'^org/', include('organization.urls', namespace='org')),
+
+    # 课程相关 url 配置
+    url(r'^course/', include('courses.urls', namespace='course')),
 
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
 ]
