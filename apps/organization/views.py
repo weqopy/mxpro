@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.http import HttpResponse
 
+from courses.models import Course
 from operation.models import UserFavorite
 from organization.forms import UserAskForm
 from organization.models import CourseOrg, CityDict, Teacher
@@ -217,3 +218,31 @@ class TeacherListView(View):
             'sorted_teacher': sorted_teacher,
             'sort': sort,
         })
+
+
+class TeacherDetailView(View):
+    def get(self, request, teacher_id):
+        teacher = Teacher.objects.get(id=int(teacher_id))
+        teacher.click_nums += 1
+        teacher.save()
+        all_courses = Course.objects.filter(teacher=teacher)
+
+        has_teacher_faved = False
+        if UserFavorite.objects.filter(user=request.user, fav_type=3, fav_id=teacher.id):
+            has_teacher_faved = True
+
+        has_org_faved = False
+        if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=teacher.org.id):
+            has_org_faved = True
+
+
+        sorted_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
+
+        return render(request, 'teacher-detail.html', {
+            'teacher': teacher,
+            'all_courses': all_courses,
+            'sorted_teacher': sorted_teacher,
+            'has_teacher_faved': has_teacher_faved,
+            'has_org_faved': has_org_faved,
+        })
+

@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from .views import OrgView, AddUserAskView, OrgHomeView, \
-    OrgCourseView, OrgDescView, OrgTeacherView, AddFavView, TeacherListView
+    OrgCourseView, OrgDescView, OrgTeacherView, AddFavView, TeacherListView, \
+    TeacherDetailView
 
 # 在 mxpro.urls 中使用 include
 urlpatterns = [
@@ -18,4 +19,8 @@ urlpatterns = [
 
     # 教师列表
     url(r'^teacher/list/$', TeacherListView.as_view(), name='teacher_list'),
+
+    # 教师详情页
+    url(r'^teacher/detail/(?P<teacher_id>\d+)/$',
+        TeacherDetailView.as_view(), name='teacher_detail'),
 ]
