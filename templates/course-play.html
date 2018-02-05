@@ -35,6 +35,7 @@
             <li><a href="{% url 'index' %}">首页</a>></li>
             <li><a href="{% url 'course:course_list' %}">公开课</a>></li>
             <li><a href="{% url 'course:course_detail' course.id  %}">{{ course.name }}</a>></li>
+            <li><a href="{% url 'course:course_info' course.id  %}">视频列表</a>></li>
             <li>{{ video.name }}</li>
         </ul>
     </div>

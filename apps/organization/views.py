@@ -1,3 +1,4 @@
+from django.db.models import Q
 from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
 from django.shortcuts import render
 from django.views.generic import View
@@ -19,6 +20,11 @@ class OrgView(View):
         city_id = request.GET.get('city', "")
         if city_id:
             all_orgs = all_orgs.filter(city_id=int(city_id))
+
+        # 机构搜索
+        search_kw = request.GET.get('keywords', "")
+        if search_kw:
+            all_orgs = all_orgs.filter(Q(name__icontains=search_kw)|Q(desc__icontains=search_kw))
 
         # 类别筛选
         category = request.GET.get('ct', "")
@@ -202,6 +208,13 @@ class TeacherListView(View):
                 all_teachers = all_teachers.order_by('-click_nums')
 
         sorted_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
+
+        # 教师搜索
+        search_kw = request.GET.get('keywords', "")
+        if search_kw:
+            all_teachers = all_teachers.filter(Q(name__icontains=search_kw)|
+                                               Q(work_company__icontains=search_kw)|
+                                               Q(work_position__icontains=search_kw))
 
         # 对教师列表分页
         try:
