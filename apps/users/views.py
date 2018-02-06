@@ -8,6 +8,7 @@ from django.views.generic.base import View
 from users.forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm
 from users.models import UserProfile, EmailVerifyRecord
 from utils.email_send import send_register_email
+from utils.mixin_utils import LoginRequiredMixin
 
 
 class CustomBackend(ModelBackend):
@@ -136,3 +137,11 @@ class ModifyView(View):
             email = request.POST.get('email', '')
             return render(request, 'password_reset.html',
                           {'email': email, 'modify_form': modify_form})
+
+
+class UserInfoView(LoginRequiredMixin, View):
+    """
+    用户个人信息
+    """
+    def get(self, request):
+        return render(request, 'usercenter-info.html', {})
