@@ -3,8 +3,6 @@ import json
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponseRedirect, HttpResponse
-from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.views.generic.base import View
 
