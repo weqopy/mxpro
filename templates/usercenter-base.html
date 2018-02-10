@@ -128,7 +128,7 @@
                             <i class="error-tips"></i>
                         </li>
 						<li>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：
-                           <input type="text" id="birth_day" name="birday" value="2009年9月2日" readonly="readonly"/>
+                           <input type="text" id="birth_day" name="birthday" value="2009年9月2日" readonly="readonly"/>
                             <i class="error-tips"></i>
 						</li>
 						<li>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
@@ -232,6 +232,7 @@
             <div class="button">
                 <input class="changeemai_btn" id="jsChangeEmailBtn" type="button" value="完成"/>
             </div>
+            {% csrf_token %}
         </form>
     </div>
 
