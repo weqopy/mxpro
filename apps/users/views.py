@@ -3,6 +3,7 @@ import json
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
+from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
@@ -10,7 +11,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 
 from courses.models import Course
-from operation.models import UserCourse, UserFavorite
+from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
 from users.forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, \
     UploadImageForm, UserInfoForm
@@ -51,6 +52,12 @@ class RegisterView(View):
             user_profile.password = make_password(pass_word)
             user_profile.is_active = False
             user_profile.save()
+
+            # 注册消息
+            user_message = UserMessage()
+            user_message.user = user_profile
+            user_message.message = '欢迎注册'
+            user_message.save()
 
             send_register_email(user_name, 'register')
             return render(request, "login.html")
@@ -151,8 +158,12 @@ class UserInfoView(LoginRequiredMixin, View):
     """
     用户个人信息
     """
+
     def get(self, request):
-        return render(request, 'usercenter-info.html', {})
+        current_page = 'info'
+        return render(request, 'usercenter-info.html', {
+            'current_page': current_page,
+        })
 
     def post(self, request):
         user_info_form = UserInfoForm(request.POST, instance=request.user)
@@ -239,10 +250,12 @@ class MyCourseView(LoginRequiredMixin, View):
     我的课程
     """
     def get(self, request):
+        current_page = 'course'
         user_courses = UserCourse.objects.filter(user=request.user)
 
         return render(request, 'usercenter-mycourse.html', {
-            "user_courses": user_courses
+            "user_courses": user_courses,
+            'current_page': current_page,
         })
 
 
@@ -252,13 +265,15 @@ class MyFavOrgView(LoginRequiredMixin, View):
     """
     def get(self, request):
         org_list = []
+        current_page = 'fav'
         fav_orgs = UserFavorite.objects.filter(user=request.user, fav_type=2, )
         for fav_org in fav_orgs:
             org_id = fav_org.fav_id
             org = CourseOrg.objects.get(id=org_id)
             org_list.append(org)
         return render(request, 'usercenter-fav-org.html', {
-            "org_list": org_list
+            "org_list": org_list,
+            'current_page': current_page,
         })
 
 
@@ -268,13 +283,15 @@ class MyFavTeacherView(LoginRequiredMixin, View):
     """
     def get(self, request):
         teacher_list = []
+        current_page = 'fav'
         fav_teachers = UserFavorite.objects.filter(user=request.user, fav_type=3)
         for fav_teacher in fav_teachers:
             teacher_id = fav_teacher.fav_id
             teacher = Teacher.objects.get(id=teacher_id)
             teacher_list.append(teacher)
         return render(request, 'usercenter-fav-teacher.html', {
-            "teacher_list": teacher_list
+            "teacher_list": teacher_list,
+            'current_page': current_page,
         })
 
 
@@ -284,11 +301,36 @@ class MyFavCourseView(LoginRequiredMixin, View):
     """
     def get(self, request):
         course_list = []
+        current_page = 'fav'
         fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
         for fav_course in fav_courses:
             course_id = fav_course.fav_id
             course = Course.objects.get(id=course_id)
             course_list.append(course)
         return render(request, 'usercenter-fav-course.html', {
-            "course_list": course_list
+            "course_list": course_list,
+            'current_page': current_page,
+        })
+
+
+class MessageView(LoginRequiredMixin, View):
+    """
+    我的消息
+    """
+    def get(self, request):
+        current_page = 'message'
+        all_messages = UserMessage.objects.filter(user=request.user.id)
+
+        try:
+            page = request.GET.get('page', 1)
+        except PageNotAnInteger:
+            page = 1
+
+        p = Paginator(all_messages, 5, request=request)
+
+        messages = p.page(page)
+
+        return render(request, 'usercenter-message.html', {
+            'messages': messages,
+            'current_page': current_page,
         })
