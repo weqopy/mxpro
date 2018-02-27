@@ -1,8 +1,8 @@
 from django.db.models import Q
-from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import View
-from django.http import HttpResponse
+from pure_pagination import PageNotAnInteger, Paginator
 
 from courses.models import Course
 from operation.models import UserFavorite
@@ -83,6 +83,8 @@ class OrgHomeView(View):
     def get(self, request, org_id):
         current_page = "home"
         course_org = CourseOrg.objects.get(id=int(org_id))
+        course_org.click_nums += 1
+        course_org.save()
         has_fav = False
         if request.user.is_authenticated():
             if UserFavorite.objects.filter(user=request.user, fav_id=course_org.id, fav_type=2):
@@ -180,6 +182,24 @@ class AddFavView(View):
         if exist_records:
             # 用户已经存在，再次点击，表示取消收藏
             exist_records.delete()
+            if int(fav_type) == 1:
+                course = Course.objects.get(id=int(fav_id))
+                course.favorite_nums -= 1
+                if course.favorite_nums < 0:
+                    course.favorite_nums = 0
+                course.save()
+            elif int(fav_type) == 2:
+                course_org = CourseOrg.objects.get(id=int(fav_id))
+                course_org.fav_nums -= 1
+                if course_org.fav_nums < 0:
+                    course_org.fav_nums = 0
+                course_org.save()
+            elif int(fav_type) == 3:
+                teacher = Teacher.objects.get(id=int(fav_id))
+                teacher.fav_nums -= 1
+                if teacher.fav_nums < 0:
+                    teacher.fav_nums = 0
+                teacher.save()
             return HttpResponse('{"status":"success", "msg":"收藏"}', content_type="application/json")
 
         else:

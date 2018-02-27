@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class UserProfile(AbstractUser):
@@ -26,7 +26,7 @@ class UserProfile(AbstractUser):
 
     def unread_message_nums(self):
         from operation.models import UserMessage
-        return UserMessage.objects.filter(user=self.id).count()
+        return UserMessage.objects.filter(user=self.id, has_read=False).count()
 
 class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name='验证码')

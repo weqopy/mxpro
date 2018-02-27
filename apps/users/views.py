@@ -1,14 +1,14 @@
 import json
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
-from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
-from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
 from django.db.models import Q
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
 from django.views.generic.base import View
+from pure_pagination import PageNotAnInteger, Paginator
 
 from courses.models import Course
 from operation.models import UserCourse, UserFavorite, UserMessage
@@ -79,6 +79,11 @@ class ActiveView(View):
             return render(request, "active_fail.html")
         return render(request, "login.html")
 
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse("index"))
 
 # 登录视图类
 class LoginView(View):
@@ -320,6 +325,11 @@ class MessageView(LoginRequiredMixin, View):
     def get(self, request):
         current_page = 'message'
         all_messages = UserMessage.objects.filter(user=request.user.id)
+        all_unread_messages = UserMessage.objects.filter(user=request.user.id,
+                                                         has_read=False)
+        for unread_message in all_unread_messages:
+            unread_message.has_read = True
+            unread_message.save()
 
         try:
             page = request.GET.get('page', 1)

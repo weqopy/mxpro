@@ -20,7 +20,7 @@ from django.views.static import serve
 import xadmin
 from mxpro.settings import MEDIA_ROOT
 from users.views import LoginView, RegisterView, ActiveView, ForgetPwdView, \
-    ResetView, ModifyView
+    ResetView, ModifyView, LogoutView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^captcha/', include('captcha.urls')),
 
     url(r'^login/$', LoginView.as_view(), name='login'),
+    url(r'^logout/$', LogoutView.as_view(), name='logout'),
     url(r'^register/$', RegisterView.as_view(), name='register'),
     url(r'^active/(?P<active_code>.*)/$', ActiveView.as_view(), name='active'),
     url(r'^forget/$', ForgetPwdView.as_view(), name='forget_pwd'),
