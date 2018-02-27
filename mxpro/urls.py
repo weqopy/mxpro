@@ -18,7 +18,7 @@ from django.views.generic import TemplateView
 from django.views.static import serve
 
 import xadmin
-from mxpro.settings import MEDIA_ROOT
+from mxpro.settings import MEDIA_ROOT, STATIC_ROOT
 from users.views import LoginView, RegisterView, ActiveView, ForgetPwdView, \
     ResetView, ModifyView, LogoutView, IndexView
 
@@ -42,8 +42,14 @@ urlpatterns = [
     url(r'^course/', include('courses.urls', namespace='course')),
 
     url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 
     # 用户相关 url 配置
     url(r'^users/', include('users.urls', namespace='users')),
 
 ]
+
+# 全局404页面
+handler404 = 'users.views.page_not_found'
+# 全局500页面
+handler500 = 'users.views.page_error'
