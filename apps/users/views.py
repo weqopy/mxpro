@@ -15,7 +15,7 @@ from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
 from users.forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, \
     UploadImageForm, UserInfoForm
-from users.models import UserProfile, EmailVerifyRecord
+from users.models import UserProfile, EmailVerifyRecord, Banner
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -343,4 +343,18 @@ class MessageView(LoginRequiredMixin, View):
         return render(request, 'usercenter-message.html', {
             'messages': messages,
             'current_page': current_page,
+        })
+
+
+class IndexView(View):
+    def get(self, request):
+        all_banners = Banner.objects.all().order_by('index')
+        courses = Course.objects.filter(is_banner=False)[:6]
+        banner_courses = Course.objects.filter(is_banner=False)[:3]
+        course_orgs = CourseOrg.objects.all()[:15]
+        return render(request, 'index.html', {
+            'all_banners': all_banners,
+            'courses': courses,
+            'banner_courses': banner_courses,
+            'course_orgs': course_orgs,
         })

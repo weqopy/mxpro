@@ -20,11 +20,11 @@ from django.views.static import serve
 import xadmin
 from mxpro.settings import MEDIA_ROOT
 from users.views import LoginView, RegisterView, ActiveView, ForgetPwdView, \
-    ResetView, ModifyView, LogoutView
+    ResetView, ModifyView, LogoutView, IndexView
 
 urlpatterns = [
     url(r'^xadmin/', xadmin.site.urls),
-    url('^$', TemplateView.as_view(template_name="index.html"), name='index'),
+    url('^$', IndexView.as_view(), name='index'),
     url(r'^captcha/', include('captcha.urls')),
 
     url(r'^login/$', LoginView.as_view(), name='login'),
