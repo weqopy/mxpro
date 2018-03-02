@@ -96,6 +96,7 @@ class LoginView(View):
         if login_form.is_valid():
             user_name = request.POST.get('username', "")
             pass_word = request.POST.get('password', "")
+            # 验证
             user = authenticate(username=user_name, password=pass_word)
             if user is not None:
                 if user.is_active:

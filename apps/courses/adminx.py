@@ -9,6 +9,12 @@ class CourseAdmin(object):
                      'favorite_nums', 'image', 'add_time']
     list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times',
                    'students', 'favorite_nums', 'click_nums', 'add_time']
+    # 默认排序设置
+    # ordering = ['-click_nums']
+    # 只读设置
+    # readonly_fields = ['click_nums', 'favorite_nums']
+    # 隐藏设置，与只读重复无效
+    # exclude = ['click_nums']
 
 
 class LessonAdmin(object):
