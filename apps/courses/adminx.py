@@ -1,5 +1,18 @@
 import xadmin
-from .models import Course, Lesson, Video, CourseResource
+from .models import Course, Lesson, Video, CourseResource, BannerCourse
+
+
+class LessonInline(object):
+    """
+    设置课程页面增加添加章节的功能，一层嵌套
+    """
+    module = Lesson
+    extra = 0
+
+
+class CourseResourceInline(object):
+    module = CourseResource
+    extra = 0
 
 
 class CourseAdmin(object):
@@ -15,6 +28,26 @@ class CourseAdmin(object):
     # readonly_fields = ['click_nums', 'favorite_nums']
     # 隐藏设置，与只读重复无效
     # exclude = ['click_nums']
+
+    def queryset(self):
+        qs = super(CourseAdmin, self).queryset()
+        qs = qs.filter(is_banner=False)
+        return qs
+
+
+class BannerCourseAdmin(object):
+    list_display = ['name', 'desc', 'detail', 'degree', 'learn_times',
+                    'students', 'favorite_nums', 'click_nums', 'add_time']
+    search_fields = ['name', 'desc', 'detail', 'degree', 'students',
+                     'favorite_nums', 'image', 'add_time']
+    list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times',
+                   'students', 'favorite_nums', 'click_nums', 'add_time']
+
+    def queryset(self):
+        qs = super(BannerCourseAdmin, self).queryset()
+        qs = qs.filter(is_banner=True)
+        return qs
+
 
 
 class LessonAdmin(object):
@@ -40,3 +73,4 @@ xadmin.site.register(Course, CourseAdmin)
 xadmin.site.register(Lesson, LessonAdmin)
 xadmin.site.register(Video, VideoAdmin)
 xadmin.site.register(CourseResource, CourseResourceAdmin)
+xadmin.site.register(BannerCourse, BannerCourseAdmin)
