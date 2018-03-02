@@ -44,7 +44,8 @@ class CourseAdmin(object):
         obj.save()
         if obj.course_org is not None:
             course_org = obj.course_org
-            course_org.course_nums = Course.objects.filter(course_org=course_org).count()
+            course_org.course_nums = Course.objects.filter(
+                course_org=course_org).count()
             course_org.save()
 
 
@@ -60,7 +61,6 @@ class BannerCourseAdmin(object):
         qs = super(BannerCourseAdmin, self).queryset()
         qs = qs.filter(is_banner=True)
         return qs
-
 
 
 class LessonAdmin(object):

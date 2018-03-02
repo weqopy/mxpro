@@ -28,6 +28,7 @@ class UserProfile(AbstractUser):
         from operation.models import UserMessage
         return UserMessage.objects.filter(user=self.id, has_read=False).count()
 
+
 class EmailVerifyRecord(models.Model):
     code = models.CharField(max_length=20, verbose_name='验证码')
     email = models.EmailField(max_length=50, verbose_name='邮箱')

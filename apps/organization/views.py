@@ -24,7 +24,8 @@ class OrgView(View):
         # 机构搜索
         search_kw = request.GET.get('keywords', "")
         if search_kw:
-            all_orgs = all_orgs.filter(Q(name__icontains=search_kw)|Q(desc__icontains=search_kw))
+            all_orgs = all_orgs.filter(
+                Q(name__icontains=search_kw) | Q(desc__icontains=search_kw))
 
         # 类别筛选
         category = request.GET.get('ct', "")
@@ -69,7 +70,6 @@ class AddUserAskView(View):
     def post(self, request):
         userask_form = UserAskForm(request.POST)
         if userask_form.is_valid():
-            user_ask = userask_form.save(commit=True)
             return HttpResponse('{"status":"success"}', content_type="application/json")
         else:
             return HttpResponse('{"status":"fail", "msg":"添加出错"}', content_type="application/json")
@@ -232,8 +232,8 @@ class TeacherListView(View):
         # 教师搜索
         search_kw = request.GET.get('keywords', "")
         if search_kw:
-            all_teachers = all_teachers.filter(Q(name__icontains=search_kw)|
-                                               Q(work_company__icontains=search_kw)|
+            all_teachers = all_teachers.filter(Q(name__icontains=search_kw) |
+                                               Q(work_company__icontains=search_kw) |
                                                Q(work_position__icontains=search_kw))
 
         # 对教师列表分页
@@ -268,7 +268,6 @@ class TeacherDetailView(View):
         if UserFavorite.objects.filter(user=request.user, fav_type=2, fav_id=teacher.org.id):
             has_org_faved = True
 
-
         sorted_teacher = Teacher.objects.all().order_by('-click_nums')[:3]
 
         return render(request, 'teacher-detail.html', {
@@ -278,4 +277,3 @@ class TeacherDetailView(View):
             'has_teacher_faved': has_teacher_faved,
             'has_org_faved': has_org_faved,
         })
-

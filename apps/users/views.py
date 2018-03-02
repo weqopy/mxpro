@@ -86,6 +86,8 @@ class LogoutView(View):
         return HttpResponseRedirect(reverse("index"))
 
 # 登录视图类
+
+
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html', {})
@@ -185,8 +187,10 @@ class UploadImageView(LoginRequiredMixin, View):
     """
     用户修改头像
     """
+
     def post(self, request):
-        image_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+        image_form = UploadImageForm(
+            request.POST, request.FILES, instance=request.user)
         if image_form.is_valid():
             request.user.save()
             return HttpResponse('{"status":"success"}', content_type="application/json")
@@ -198,6 +202,7 @@ class UpdatePwdView(View):
     """
     个人中心修改密码
     """
+
     def post(self, request):
         modify_form = ModifyPwdForm(request.POST)
         if modify_form.is_valid():
@@ -221,6 +226,7 @@ class SendEmailCodeView(LoginRequiredMixin, View):
     """
     发送邮箱验证码
     """
+
     def get(self, request):
         email = request.GET.get('email', '')
 
@@ -235,17 +241,19 @@ class UpdateEmailView(LoginRequiredMixin, View):
     """
     修改个人邮箱
     """
+
     def post(self, request):
         email = request.POST.get('email', '')
         code = request.POST.get('code', '')
 
-        existed_recodes = EmailVerifyRecord.objects.filter(email=email, code=code, send_type='update_email')
+        existed_recodes = EmailVerifyRecord.objects.filter(
+            email=email, code=code, send_type='update_email')
         if existed_recodes:
-             user = request.user
-             user.email = email
-             user.save()
-             return HttpResponse('{"status":"success"}',
-                                 content_type='application/json')
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse('{"status":"success"}',
+                                content_type='application/json')
         else:
             return HttpResponse('{"email":"验证码错误"}',
                                 content_type='application/json')
@@ -255,6 +263,7 @@ class MyCourseView(LoginRequiredMixin, View):
     """
     我的课程
     """
+
     def get(self, request):
         current_page = 'course'
         user_courses = UserCourse.objects.filter(user=request.user)
@@ -269,6 +278,7 @@ class MyFavOrgView(LoginRequiredMixin, View):
     """
     我的课程收藏
     """
+
     def get(self, request):
         org_list = []
         current_page = 'fav'
@@ -287,10 +297,12 @@ class MyFavTeacherView(LoginRequiredMixin, View):
     """
     我的教师收藏
     """
+
     def get(self, request):
         teacher_list = []
         current_page = 'fav'
-        fav_teachers = UserFavorite.objects.filter(user=request.user, fav_type=3)
+        fav_teachers = UserFavorite.objects.filter(
+            user=request.user, fav_type=3)
         for fav_teacher in fav_teachers:
             teacher_id = fav_teacher.fav_id
             teacher = Teacher.objects.get(id=teacher_id)
@@ -305,10 +317,12 @@ class MyFavCourseView(LoginRequiredMixin, View):
     """
     我的课程收藏
     """
+
     def get(self, request):
         course_list = []
         current_page = 'fav'
-        fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
+        fav_courses = UserFavorite.objects.filter(
+            user=request.user, fav_type=1)
         for fav_course in fav_courses:
             course_id = fav_course.fav_id
             course = Course.objects.get(id=course_id)
@@ -323,6 +337,7 @@ class MessageView(LoginRequiredMixin, View):
     """
     我的消息
     """
+
     def get(self, request):
         current_page = 'message'
         all_messages = UserMessage.objects.filter(user=request.user.id)
