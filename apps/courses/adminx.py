@@ -17,7 +17,7 @@ class CourseResourceInline(object):
 
 class CourseAdmin(object):
     list_display = ['name', 'desc', 'detail', 'degree', 'learn_times',
-                    'students', 'favorite_nums', 'click_nums', 'add_time']
+                    'students', 'favorite_nums', 'click_nums', 'add_time', 'get_zj_nums', 'go_to']
     search_fields = ['name', 'desc', 'detail', 'degree', 'students',
                      'favorite_nums', 'image', 'add_time']
     list_filter = ['name', 'desc', 'detail', 'degree', 'learn_times',
@@ -28,11 +28,24 @@ class CourseAdmin(object):
     # readonly_fields = ['click_nums', 'favorite_nums']
     # 隐藏设置，与只读重复无效
     # exclude = ['click_nums']
+    # 在列表页直接进行编辑
+    list_editable = ['degree', 'desc']
+    # 自动刷新时间设置
+    # refresh_times = [3, 5, 10]
 
     def queryset(self):
         qs = super(CourseAdmin, self).queryset()
         qs = qs.filter(is_banner=False)
         return qs
+
+    def save_models(self):
+        # 保存课程时统计课程机构的课程数
+        obj = self.new_obj
+        obj.save()
+        if obj.course_org is not None:
+            course_org = obj.course_org
+            course_org.course_nums = Course.objects.filter(course_org=course_org).count()
+            course_org.save()
 
 
 class BannerCourseAdmin(object):
