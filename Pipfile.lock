@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "22a88b9a8f49c3144c46323444cdb341cc5883720804c7be22b536499f5f2a19"
+            "sha256": "45b5ad51c54713e6e2ac816bcea973f0d360fd3bc9eabb691dab15494f0fab16"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -41,6 +41,13 @@
                 "sha256:9dba5611fbf27893347349fd51cc1911cb403682a7163373adacc565d11e2e4c"
             ],
             "version": "==20121119"
+        },
+        "dj-database-url": {
+            "hashes": [
+                "sha256:851785365761ebe4994a921b433062309eb882fedd318e1b0fcecc607ed02da9",
+                "sha256:4aeaeb1f573c74835b0686a2b46b85990571159ffc21aa57ecd4d1e1cb334163"
+            ],
+            "version": "==0.5.0"
         },
         "django": {
             "hashes": [
