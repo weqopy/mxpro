@@ -12,6 +12,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+# import dj_database_url
+import django_heroku
+django_heroku.settings(locals())
+
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,7 +34,7 @@ SECRET_KEY = '^=pm8-==9x&u0%x4o-+nz*u!id+er-ffy*o_-b99ku8hgnur97'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['mxpro.herokuapp.com', '127.0.0.1']
 
 # Application definition
 AUTHENTICATION_BACKENDS = (
@@ -87,7 +92,8 @@ WSGI_APPLICATION = 'mxpro.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
+# db_from_env = dj_database_url.config(conn_max_age=500)
+# DATABASES['default'].update(db_from_env)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -132,7 +138,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -160,3 +166,5 @@ PAGINATION_SETTINGS = {
     'MARGIN_PAGES_DISPLAYED': 2,
     'SHOW_FIRST_PAGE_WHEN_INVALID': True,
 }
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
