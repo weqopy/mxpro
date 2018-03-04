@@ -1,12 +1,13 @@
 from django.db.models import Q
 from django.shortcuts import render
 from django.views.generic import View
-from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
+from pure_pagination import PageNotAnInteger, Paginator
 
 from courses.models import Course, CourseResource, Video
 from operation.models import UserFavorite, CourseComments, UserCourse
 from django.http import HttpResponse
 from utils.mixin_utils import LoginRequiredMixin
+
 
 class CourseListView(View):
     def get(self, request):
@@ -17,7 +18,8 @@ class CourseListView(View):
         # 课程搜索
         search_kw = request.GET.get('keywords', "")
         if search_kw:
-            all_courses = all_courses.filter(Q(name__icontains=search_kw)|Q(desc__icontains=search_kw)|Q(detail__icontains=search_kw))
+            all_courses = all_courses.filter(Q(name__icontains=search_kw) | Q(
+                desc__icontains=search_kw) | Q(detail__icontains=search_kw))
 
         # 课程排序
         sort = request.GET.get('sort', "")
@@ -49,22 +51,24 @@ class VideoPlayView(View):
     视频播放页面
     """
     # TODO: 视频窗口不居中，页面待调整
+
     def get(self, request, video_id):
         video = Video.objects.get(id=int(video_id))
         course = video.lesson.course
         course.students += 1
         course.save()
         # 查询用户是否已关联该课程
-        user_courses_check = UserCourse.objects.filter(user=request.user, course=course)
+        user_courses_check = UserCourse.objects.filter(
+            user=request.user, course=course)
         if not user_courses_check:
             user_course = UserCourse(user=request.user, course=course)
             user_course.save()
 
         user_courses = UserCourse.objects.filter(course=course)
         user_ids = [user_course.user.id for user_course in user_courses]
-        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
         course_ids = [user_course.course.id for user_course in user_courses]
-        relate_courses = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]
+        relate_courses = Course.objects.filter(
+            id__in=course_ids).order_by('-click_nums')[:5]
         all_resources = CourseResource.objects.filter(course=course)
         return render(request, 'course-play.html', {
             'course': course,
@@ -73,10 +77,12 @@ class VideoPlayView(View):
             'video': video,
         })
 
+
 class CourseDetailView(View):
     """
     课程详情页
     """
+
     def get(self, request, course_id):
         # course_id 在 HTML 文件中，通过 url 调用 course.id
         course = Course.objects.get(id=int(course_id))
@@ -93,7 +99,6 @@ class CourseDetailView(View):
                 has_fav_course = True
             if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org.id, fav_type=2):
                 has_fav_org = True
-
 
         tag = course.tag
         if tag:
@@ -117,16 +122,17 @@ class CourseInfoView(LoginRequiredMixin, View):
         course.save()
 
         # 查询用户是否已关联该课程
-        user_courses_check = UserCourse.objects.filter(user=request.user, course=course)
+        user_courses_check = UserCourse.objects.filter(
+            user=request.user, course=course)
         if not user_courses_check:
             user_course = UserCourse(user=request.user, course=course)
             user_course.save()
 
         user_courses = UserCourse.objects.filter(course=course)
         user_ids = [user_course.user.id for user_course in user_courses]
-        all_user_courses = UserCourse.objects.filter(user_id__in=user_ids)
         course_ids = [user_course.course.id for user_course in user_courses]
-        relate_courses = Course.objects.filter(id__in=course_ids).order_by('-click_nums')[:5]
+        relate_courses = Course.objects.filter(
+            id__in=course_ids).order_by('-click_nums')[:5]
         all_resources = CourseResource.objects.filter(course=course)
         return render(request, 'course-video.html', {
             'course': course,

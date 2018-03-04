@@ -1,21 +1,21 @@
 import json
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.backends import ModelBackend
 from django.contrib.auth.hashers import make_password
-from pure_pagination import PageNotAnInteger, Paginator, EmptyPage
-from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
-from django.shortcuts import render
 from django.db.models import Q
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
 from django.views.generic.base import View
+from pure_pagination import PageNotAnInteger, Paginator
 
 from courses.models import Course
 from operation.models import UserCourse, UserFavorite, UserMessage
 from organization.models import CourseOrg, Teacher
 from users.forms import LoginForm, RegisterForm, ForgetPwdForm, ModifyPwdForm, \
     UploadImageForm, UserInfoForm
-from users.models import UserProfile, EmailVerifyRecord
+from users.models import UserProfile, EmailVerifyRecord, Banner
 from utils.email_send import send_register_email
 from utils.mixin_utils import LoginRequiredMixin
 
@@ -80,7 +80,14 @@ class ActiveView(View):
         return render(request, "login.html")
 
 
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect(reverse("index"))
+
 # 登录视图类
+
+
 class LoginView(View):
     def get(self, request):
         return render(request, 'login.html', {})
@@ -91,6 +98,7 @@ class LoginView(View):
         if login_form.is_valid():
             user_name = request.POST.get('username', "")
             pass_word = request.POST.get('password', "")
+            # 验证
             user = authenticate(username=user_name, password=pass_word)
             if user is not None:
                 if user.is_active:
@@ -179,8 +187,10 @@ class UploadImageView(LoginRequiredMixin, View):
     """
     用户修改头像
     """
+
     def post(self, request):
-        image_form = UploadImageForm(request.POST, request.FILES, instance=request.user)
+        image_form = UploadImageForm(
+            request.POST, request.FILES, instance=request.user)
         if image_form.is_valid():
             request.user.save()
             return HttpResponse('{"status":"success"}', content_type="application/json")
@@ -192,6 +202,7 @@ class UpdatePwdView(View):
     """
     个人中心修改密码
     """
+
     def post(self, request):
         modify_form = ModifyPwdForm(request.POST)
         if modify_form.is_valid():
@@ -215,6 +226,7 @@ class SendEmailCodeView(LoginRequiredMixin, View):
     """
     发送邮箱验证码
     """
+
     def get(self, request):
         email = request.GET.get('email', '')
 
@@ -229,17 +241,19 @@ class UpdateEmailView(LoginRequiredMixin, View):
     """
     修改个人邮箱
     """
+
     def post(self, request):
         email = request.POST.get('email', '')
         code = request.POST.get('code', '')
 
-        existed_recodes = EmailVerifyRecord.objects.filter(email=email, code=code, send_type='update_email')
+        existed_recodes = EmailVerifyRecord.objects.filter(
+            email=email, code=code, send_type='update_email')
         if existed_recodes:
-             user = request.user
-             user.email = email
-             user.save()
-             return HttpResponse('{"status":"success"}',
-                                 content_type='application/json')
+            user = request.user
+            user.email = email
+            user.save()
+            return HttpResponse('{"status":"success"}',
+                                content_type='application/json')
         else:
             return HttpResponse('{"email":"验证码错误"}',
                                 content_type='application/json')
@@ -249,6 +263,7 @@ class MyCourseView(LoginRequiredMixin, View):
     """
     我的课程
     """
+
     def get(self, request):
         current_page = 'course'
         user_courses = UserCourse.objects.filter(user=request.user)
@@ -263,6 +278,7 @@ class MyFavOrgView(LoginRequiredMixin, View):
     """
     我的课程收藏
     """
+
     def get(self, request):
         org_list = []
         current_page = 'fav'
@@ -281,10 +297,12 @@ class MyFavTeacherView(LoginRequiredMixin, View):
     """
     我的教师收藏
     """
+
     def get(self, request):
         teacher_list = []
         current_page = 'fav'
-        fav_teachers = UserFavorite.objects.filter(user=request.user, fav_type=3)
+        fav_teachers = UserFavorite.objects.filter(
+            user=request.user, fav_type=3)
         for fav_teacher in fav_teachers:
             teacher_id = fav_teacher.fav_id
             teacher = Teacher.objects.get(id=teacher_id)
@@ -299,10 +317,12 @@ class MyFavCourseView(LoginRequiredMixin, View):
     """
     我的课程收藏
     """
+
     def get(self, request):
         course_list = []
         current_page = 'fav'
-        fav_courses = UserFavorite.objects.filter(user=request.user, fav_type=1)
+        fav_courses = UserFavorite.objects.filter(
+            user=request.user, fav_type=1)
         for fav_course in fav_courses:
             course_id = fav_course.fav_id
             course = Course.objects.get(id=course_id)
@@ -317,9 +337,15 @@ class MessageView(LoginRequiredMixin, View):
     """
     我的消息
     """
+
     def get(self, request):
         current_page = 'message'
         all_messages = UserMessage.objects.filter(user=request.user.id)
+        all_unread_messages = UserMessage.objects.filter(user=request.user.id,
+                                                         has_read=False)
+        for unread_message in all_unread_messages:
+            unread_message.has_read = True
+            unread_message.save()
 
         try:
             page = request.GET.get('page', 1)
@@ -334,3 +360,31 @@ class MessageView(LoginRequiredMixin, View):
             'messages': messages,
             'current_page': current_page,
         })
+
+
+class IndexView(View):
+    def get(self, request):
+        all_banners = Banner.objects.all().order_by('index')
+        courses = Course.objects.filter(is_banner=False)[:6]
+        banner_courses = Course.objects.filter(is_banner=False)[:3]
+        course_orgs = CourseOrg.objects.all()[:15]
+        return render(request, 'index.html', {
+            'all_banners': all_banners,
+            'courses': courses,
+            'banner_courses': banner_courses,
+            'course_orgs': course_orgs,
+        })
+
+
+def page_not_found(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response('404.html', {})
+    response.status_code = 404
+    return response
+
+
+def page_error(request):
+    from django.shortcuts import render_to_response
+    response = render_to_response('500.html', {})
+    response.status_code = 500
+    return response

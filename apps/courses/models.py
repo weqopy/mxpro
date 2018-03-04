@@ -10,6 +10,7 @@ class Course(models.Model):
     name = models.CharField(max_length=50, verbose_name='课程名')
     desc = models.CharField(max_length=300, verbose_name='课程描述')
     detail = models.TextField(verbose_name='课程详情')
+    is_banner = models.BooleanField(default=False, verbose_name='是否轮播')
     degree = models.CharField(choices=(('cj', '初级'), ('zj', '中级'), ('gj', '高级')),
                               max_length=2, verbose_name='课程难度')
     learn_times = models.IntegerField(default=0, verbose_name='学习时长（分钟数）')
@@ -25,9 +26,9 @@ class Course(models.Model):
     tag = models.CharField(default='', verbose_name='课程标签', max_length=10)
     add_time = models.DateTimeField(default=datetime.now, verbose_name='添加时间')
     need_know = models.CharField(
-        max_length=300, default='', verbose_name='课程描述')
+        max_length=300, default='', blank=True, verbose_name='课程描述')
     teacher_tell = models.CharField(
-        max_length=300, default='', verbose_name='老师告诉你')
+        max_length=300, default='', blank=True, verbose_name='老师告诉你')
 
     class Meta:
         verbose_name = '课程'
@@ -35,6 +36,16 @@ class Course(models.Model):
 
     def get_zj_nums(self):
         return self.lesson_set.all().count()
+    # 在对应 adminx.CourseAdmin.list_display 中添加类方法名即可显示
+    # short_description 自定义显示标题
+    get_zj_nums.short_description = "章节数"
+
+    def go_to(self):
+        # 添加 HTML 代码
+        # 需要使用 mark_safe
+        from django.utils.safestring import mark_safe
+        return mark_safe("<a href='http://www.python.org'>Python 官网</a>")
+    go_to.short_description = "跳转"
 
     def get_learn_users(self):
         return self.usercourse_set.all()[:5]
@@ -45,6 +56,13 @@ class Course(models.Model):
     def __str__(self):
         # 由于 Lesson.course 为 Course 外键，使用__str__方法可方便显示
         return self.name
+
+
+class BannerCourse(Course):
+    class Meta:
+        verbose_name = "轮播课程"
+        verbose_name_plural = verbose_name
+        proxy = True
 
 
 class Lesson(models.Model):

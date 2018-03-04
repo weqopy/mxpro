@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
 from .views import OrgView, AddUserAskView, OrgHomeView, \
     OrgCourseView, OrgDescView, OrgTeacherView, AddFavView, TeacherListView, \
     TeacherDetailView

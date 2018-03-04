@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.conf.urls import url
 from .views import UserInfoView, UploadImageView, UpdatePwdView, \
     SendEmailCodeView, UpdateEmailView, MyCourseView, MyFavOrgView, \
     MyFavTeacherView, MyFavCourseView, MessageView

@@ -15,6 +15,9 @@ class CourseOrgAdmin(object):
                      'address', 'city']
     list_filter = ['name', 'desc', 'click_nums', 'fav_nums',
                    'address', 'city', 'add_time']
+    # Course 外键，设置添加课程时选择‘课程机构’的形式
+    # TODO: 无效
+    # relfield_style = 'fk-ajax'
 
 
 class TeacherAdmin(object):
