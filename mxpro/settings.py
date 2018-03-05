@@ -17,7 +17,6 @@ import django_heroku
 django_heroku.settings(locals())
 
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # add dirs for apps
@@ -146,7 +145,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-    os.path.join(APP_DIR, 'static'),
 ]
 
 EMAIL_HOST = "smtp.sina.com"
@@ -159,7 +157,7 @@ EMAIL_FROM = os.environ.get('sina_mail')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'collect_static')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 7,
