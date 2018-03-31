@@ -143,9 +143,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, 'static'),
-# ]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 
 EMAIL_HOST = "smtp.sina.com"
 EMAIL_PORT = 25
@@ -157,7 +157,7 @@ EMAIL_FROM = os.environ.get('sina_mail')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'clooect_static')
 
 PAGINATION_SETTINGS = {
     'PAGE_RANGE_DISPLAYED': 7,
