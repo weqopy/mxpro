@@ -12,11 +12,12 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
-import dj_database_url
 
-import django_heroku
+# import dj_database_url
 
-django_heroku.settings(locals())
+# import django_heroku
+
+# django_heroku.settings(locals())
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -91,18 +92,17 @@ WSGI_APPLICATION = "mxpro.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-db_from_env = dj_database_url.config(conn_max_age=500)
+# db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES = {
     "default": {
-        "ENGINE": "d3u0h4iehpl3vf",
+        "ENGINE": "django.db.backends.mysql",
         "NAME": "mxonline",
-        "PORT": 5432,
-        "USER": "svyosgddzuwkis",
-        "PASSWORD": "8bd0affa2a6db4d1c2f7280746a4955ce44e7418d18c2b1ce416fed76c943463",
-        "HOST": "ec2-54-227-243-210.compute-1.amazonaws.com",
+        "USER": "root",
+        "PASSWORD": "weqopy1230",
+        "HOST": "127.0.0.1",
     }
 }
-DATABASES["default"].update(db_from_env)
+# DATABASES["default"].update(db_from_env)
 
 
 # Password validation
