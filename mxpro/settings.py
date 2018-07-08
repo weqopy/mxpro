@@ -12,126 +12,118 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
-# import dj_database_url
-# import django_heroku
-# django_heroku.settings(locals())
+import dj_database_url
+
+import django_heroku
+
+django_heroku.settings(locals())
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # add dirs for apps
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
-sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, "apps"))
+sys.path.insert(0, os.path.join(BASE_DIR, "extra_apps"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '^=pm8-==9x&u0%x4o-+nz*u!id+er-ffy*o_-b99ku8hgnur97'
+SECRET_KEY = "^=pm8-==9x&u0%x4o-+nz*u!id+er-ffy*o_-b99ku8hgnur97"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mxpro.herokuapp.com', '127.0.0.1']
+ALLOWED_HOSTS = ["mxpro.herokuapp.com", "127.0.0.1"]
 
 # Application definition
-AUTHENTICATION_BACKENDS = (
-    'users.views.CustomBackend',
-)
+AUTHENTICATION_BACKENDS = ("users.views.CustomBackend",)
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'users',
-    'courses',
-    'organization',
-    'operation',
-    'xadmin',
-    'crispy_forms',
-    'captcha',
-    'pure_pagination',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "users",
+    "courses",
+    "organization",
+    "operation",
+    "xadmin",
+    "crispy_forms",
+    "captcha",
+    "pure_pagination",
 ]
 
-AUTH_USER_MODEL = 'users.UserProfile'
+AUTH_USER_MODEL = "users.UserProfile"
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'mxpro.urls'
+ROOT_URLCONF = "mxpro.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'django.template.context_processors.media',
-            ],
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.media",
+            ]
         },
-    },
+    }
 ]
 
-WSGI_APPLICATION = 'mxpro.wsgi.application'
+WSGI_APPLICATION = "mxpro.wsgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-# db_from_env = dj_database_url.config(conn_max_age=500)
-# DATABASES['default'].update(db_from_env)
+db_from_env = dj_database_url.config(conn_max_age=500)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mxonline',
-        'USER': 'root',
-        'PASSWORD': 'weqopy1230',
-        'HOST': '127.0.0.1',
+    "default": {
+        "ENGINE": "d3u0h4iehpl3vf",
+        "NAME": "mxonline",
+        "PORT": 5432,
+        "USER": "svyosgddzuwkis",
+        "PASSWORD": "8bd0affa2a6db4d1c2f7280746a4955ce44e7418d18c2b1ce416fed76c943463",
+        "HOST": "ec2-54-227-243-210.compute-1.amazonaws.com",
     }
 }
+DATABASES["default"].update(db_from_env)
+
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME':
-        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME':
-        'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'zh-Hans'
+LANGUAGE_CODE = "zh-Hans"
 # LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'Asia/Shanghai'
+TIME_ZONE = "Asia/Shanghai"
 
 USE_I18N = True
 
@@ -142,27 +134,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 EMAIL_HOST = "smtp.sina.com"
 EMAIL_PORT = 25
 # 隐藏邮箱账号密码
-EMAIL_HOST_USER = os.environ.get('sina_mail')
-EMAIL_HOST_PASSWORD = os.environ.get('sina_pwd')
+EMAIL_HOST_USER = os.environ.get("sina_mail")
+EMAIL_HOST_PASSWORD = os.environ.get("sina_pwd")
 EMAIL_USE_TLS = False
-EMAIL_FROM = os.environ.get('sina_mail')
+EMAIL_FROM = os.environ.get("sina_mail")
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_ROOT = os.path.join(BASE_DIR, 'clooect_static')
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+STATIC_ROOT = os.path.join(BASE_DIR, "clooect_static")
 
 PAGINATION_SETTINGS = {
-    'PAGE_RANGE_DISPLAYED': 7,
-    'MARGIN_PAGES_DISPLAYED': 2,
-    'SHOW_FIRST_PAGE_WHEN_INVALID': True,
+    "PAGE_RANGE_DISPLAYED": 7,
+    "MARGIN_PAGES_DISPLAYED": 2,
+    "SHOW_FIRST_PAGE_WHEN_INVALID": True,
 }
 
-STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
+STATICFILES_STORAGE = "whitenoise.django.GzipManifestStaticFilesStorage"
