@@ -36,7 +36,7 @@ SECRET_KEY = "^=pm8-==9x&u0%x4o-+nz*u!id+er-ffy*o_-b99ku8hgnur97"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["mxpro.herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 AUTHENTICATION_BACKENDS = ("users.views.CustomBackend",)
