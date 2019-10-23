@@ -2,7 +2,7 @@ astroid==1.5.3
 diff-match-patch==20121119
 dj-database-url==0.5.0
 dj-static==0.0.6
-Django==1.11.15
+Django==1.11.23
 django-crispy-forms==1.7.0
 django-formtools==2.1
 django-heroku==0.3.1
